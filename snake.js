@@ -19,12 +19,22 @@ class Player extends Rect{
     constructor() {
         super(30,30);
  
-        this.speed = 300;
+        this.speed = 30;
         this.vel = new Vec;
-        this.snakeLenght =1 ;
+        this.snakeLenght = 1;
 
     }    
 
+
+}
+//need to randomize pos each time snake touches the part
+class Part extends Rect {
+    constructor(c) {
+        super(26,26);
+        this.pos.x = Math.floor(Math.random() * c.width) - this.size.x;
+        this.pos.y = Math.floor(Math.random() * c.height) - this.size.y;;
+        this.color = 'green';
+    }
 
 }
 
@@ -42,6 +52,8 @@ class SnakeGame {
         this.player = new Player;
         this.player.pos.x = this.cW /2;
         this.player.pos.y = this.cH /2;
+
+       this.part= new Part(canvas);
         let lastTime;
         const callback = (millis) => {
             if (lastTime) {
@@ -63,6 +75,25 @@ class SnakeGame {
         this.ctx.fillStyle ='#fff';
         this.ctx.fillRect(this.player.pos.x,this.player.pos.y, this.player.size.x, this.player.size.y)
         
+        this.ctx.fillStyle = this.part.color;
+        this.ctx.fillRect(this.part.pos.x,this.part.pos.y, this.part.size.x, this.part.size.y)
+    }
+
+    collide() {
+        let touched = false
+
+        if(Math.floor(this.player.pos.x) === this.part.pos.x &&
+           Math.floor(this.player.pos.y) === this.part.pos.y &&
+           touched === false
+        ) {
+         touched === true;
+         if ( touched===true) {
+            this.player.snakeLenght += 1;
+         }
+         
+        }
+        console.log( this.player.snakeLenght)
+        
     }
 
     update(dt) {
@@ -80,9 +111,9 @@ class SnakeGame {
         } else if(this.player.pos.y < 0) {
             this.player.pos.y = this.cH;
         }
-
+        this.collide();
         this.draw();
-
+        console.log(this.player.snakeLenght)
 
     }
 
